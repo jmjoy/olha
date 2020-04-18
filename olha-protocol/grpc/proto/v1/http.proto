@@ -1,0 +1,227 @@
+syntax = "proto3";
+
+package olha.v1.http;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+enum Version {
+    HTTP_09 = 0;
+    HTTP_10 = 1;
+    HTTP_11 = 2;
+    HTTP_2 = 3;
+    HTTP_3 = 4;
+}
+
+enum Method {
+    OPTIONS = 0;
+    GET = 1;
+    POST = 2;
+    PUT = 3;
+    DELETE = 4;
+    HEAD = 5;
+    TRACE = 6;
+    CONNECT = 7;
+    PATCH = 8;
+}
+
+enum StatusCode {
+    // 100 Continue
+    // [[RFC7231, Section 6.2.1](https://tools.ietf.org/html/rfc7231#section-6.2.1)]
+    CONTINUE = 0;
+    // 101 Switching Protocols
+    // [[RFC7231, Section 6.2.2](https://tools.ietf.org/html/rfc7231#section-6.2.2)]
+    SWITCHING_PROTOCOLS = 1;
+    // 102 Processing
+    // [[RFC2518](https://tools.ietf.org/html/rfc2518)]
+    PROCESSING = 2;
+    // 202 Accepted
+    // [[RFC7231, Section 6.3.3](https://tools.ietf.org/html/rfc7231#section-6.3.3)]
+    ACCEPTED = 3;
+    // 203 Non-Authoritative Information
+    // [[RFC7231, Section 6.3.4](https://tools.ietf.org/html/rfc7231#section-6.3.4)]
+    NON_AUTHORITATIVE_INFORMATION = 4;
+    // 204 No Content
+    // [[RFC7231, Section 6.3.5](https://tools.ietf.org/html/rfc7231#section-6.3.5)]
+    NO_CONTENT = 5;
+    // 205 Reset Content
+    // [[RFC7231, Section 6.3.6](https://tools.ietf.org/html/rfc7231#section-6.3.6)]
+    RESET_CONTENT = 6;
+    // 206 Partial Content
+    // [[RFC7233, Section 4.1](https://tools.ietf.org/html/rfc7233#section-4.1)]
+    PARTIAL_CONTENT = 7;
+    // 207 Multi-Status
+    // [[RFC4918](https://tools.ietf.org/html/rfc4918)]
+    MULTI_STATUS = 8;
+    // 208 Already Reported
+    // [[RFC5842](https://tools.ietf.org/html/rfc5842)]
+    ALREADY_REPORTED = 9;
+    // 226 IM Used
+    // [[RFC3229](https://tools.ietf.org/html/rfc3229)]
+    IM_USED = 10;
+    // 300 Multiple Choices
+    // [[RFC7231, Section 6.4.1](https://tools.ietf.org/html/rfc7231#section-6.4.1)]
+    MULTIPLE_CHOICES = 11;
+    // 301 Moved Permanently
+    // [[RFC7231, Section 6.4.2](https://tools.ietf.org/html/rfc7231#section-6.4.2)]
+    MOVED_PERMANENTLY = 12;
+    // 302 Found
+    // [[RFC7231, Section 6.4.3](https://tools.ietf.org/html/rfc7231#section-6.4.3)]
+    FOUND = 13;
+    // 303 See Other
+    // [[RFC7231, Section 6.4.4](https://tools.ietf.org/html/rfc7231#section-6.4.4)]
+    SEE_OTHER = 14;
+    // 304 Not Modified
+    // [[RFC7232, Section 4.1](https://tools.ietf.org/html/rfc7232#section-4.1)]
+    NOT_MODIFIED = 15;
+    // 305 Use Proxy
+    // [[RFC7231, Section 6.4.5](https://tools.ietf.org/html/rfc7231#section-6.4.5)]
+    USE_PROXY = 16;
+    // 307 Temporary Redirect
+    // [[RFC7231, Section 6.4.7](https://tools.ietf.org/html/rfc7231#section-6.4.7)]
+    TEMPORARY_REDIRECT = 17;
+    // 308 Permanent Redirect
+    // [[RFC7238](https://tools.ietf.org/html/rfc7238)]
+    PERMANENT_REDIRECT = 18;
+    // 400 Bad Request
+    // [[RFC7231, Section 6.5.1](https://tools.ietf.org/html/rfc7231#section-6.5.1)]
+    BAD_REQUEST = 19;
+    // 401 Unauthorized
+    // [[RFC7235, Section 3.1](https://tools.ietf.org/html/rfc7235#section-3.1)]
+    UNAUTHORIZED = 20;
+    // 402 Payment Required
+    // [[RFC7231, Section 6.5.2](https://tools.ietf.org/html/rfc7231#section-6.5.2)]
+    PAYMENT_REQUIRED = 21;
+    // 403 Forbidden
+    // [[RFC7231, Section 6.5.3](https://tools.ietf.org/html/rfc7231#section-6.5.3)]
+    FORBIDDEN = 22;
+    // 404 Not Found
+    // [[RFC7231, Section 6.5.4](https://tools.ietf.org/html/rfc7231#section-6.5.4)]
+    NOT_FOUND = 23;
+    // 405 Method Not Allowed
+    // [[RFC7231, Section 6.5.5](https://tools.ietf.org/html/rfc7231#section-6.5.5)]
+    METHOD_NOT_ALLOWED = 24;
+    // 406 Not Acceptable
+    // [[RFC7231, Section 6.5.6](https://tools.ietf.org/html/rfc7231#section-6.5.6)]
+    NOT_ACCEPTABLE = 25;
+    // 407 Proxy Authentication Required
+    // [[RFC7235, Section 3.2](https://tools.ietf.org/html/rfc7235#section-3.2)]
+    PROXY_AUTHENTICATION_REQUIRED = 26;
+    // 408 Request Timeout
+    // [[RFC7231, Section 6.5.7](https://tools.ietf.org/html/rfc7231#section-6.5.7)]
+    REQUEST_TIMEOUT = 27;
+    // 409 Conflict
+    // [[RFC7231, Section 6.5.8](https://tools.ietf.org/html/rfc7231#section-6.5.8)]
+    CONFLICT = 28;
+    // 410 Gone
+    // [[RFC7231, Section 6.5.9](https://tools.ietf.org/html/rfc7231#section-6.5.9)]
+    GONE = 29;
+    // 411 Length Required
+    // [[RFC7231, Section 6.5.10](https://tools.ietf.org/html/rfc7231#section-6.5.10)]
+    LENGTH_REQUIRED = 30;
+    // 412 Precondition Failed
+    // [[RFC7232, Section 4.2](https://tools.ietf.org/html/rfc7232#section-4.2)]
+    PRECONDITION_FAILED = 31;
+    // 413 Payload Too Large
+    // [[RFC7231, Section 6.5.11](https://tools.ietf.org/html/rfc7231#section-6.5.11)]
+    PAYLOAD_TOO_LARGE = 32;
+    // 414 URI Too Long
+    // [[RFC7231, Section 6.5.12](https://tools.ietf.org/html/rfc7231#section-6.5.12)]
+    URI_TOO_LONG = 33;
+    // 415 Unsupported Media Type
+    // [[RFC7231, Section 6.5.13](https://tools.ietf.org/html/rfc7231#section-6.5.13)]
+    UNSUPPORTED_MEDIA_TYPE = 34;
+    // 416 Range Not Satisfiable
+    // [[RFC7233, Section 4.4](https://tools.ietf.org/html/rfc7233#section-4.4)]
+    RANGE_NOT_SATISFIABLE = 35;
+    // 417 Expectation Failed
+    // [[RFC7231, Section 6.5.14](https://tools.ietf.org/html/rfc7231#section-6.5.14)]
+    EXPECTATION_FAILED = 36;
+    // 418 I'm a teapot
+    // [curiously not registered by IANA but [RFC2324](https://tools.ietf.org/html/rfc2324)]
+    IM_A_TEAPOT = 37;
+    // 421 Misdirected Request
+    // [RFC7540, Section 9.1.2](http://tools.ietf.org/html/rfc7540#section-9.1.2)
+    MISDIRECTED_REQUEST = 38;
+    // 422 Unprocessable Entity
+    // [[RFC4918](https://tools.ietf.org/html/rfc4918)]
+    UNPROCESSABLE_ENTITY = 39;
+    // 423 Locked
+    // [[RFC4918](https://tools.ietf.org/html/rfc4918)]
+    LOCKED = 40;
+    // 424 Failed Dependency
+    // [[RFC4918](https://tools.ietf.org/html/rfc4918)]
+    FAILED_DEPENDENCY = 41;
+    // 426 Upgrade Required
+    // [[RFC7231, Section 6.5.15](https://tools.ietf.org/html/rfc7231#section-6.5.15)]
+    UPGRADE_REQUIRED = 42;
+    // 428 Precondition Required
+    // [[RFC6585](https://tools.ietf.org/html/rfc6585)]
+    PRECONDITION_REQUIRED = 43;
+    // 429 Too Many Requests
+    // [[RFC6585](https://tools.ietf.org/html/rfc6585)]
+    TOO_MANY_REQUESTS = 44;
+    // 431 Request Header Fields Too Large
+    // [[RFC6585](https://tools.ietf.org/html/rfc6585)]
+    REQUEST_HEADER_FIELDS_TOO_LARGE = 45;
+    // 451 Unavailable For Legal Reasons
+    // [[RFC7725](http://tools.ietf.org/html/rfc7725)]
+    UNAVAILABLE_FOR_LEGAL_REASONS = 46;
+    // 500 Internal Server Error
+    // [[RFC7231, Section 6.6.1](https://tools.ietf.org/html/rfc7231#section-6.6.1)]
+    INTERNAL_SERVER_ERROR = 47;
+    // 501 Not Implemented
+    // [[RFC7231, Section 6.6.2](https://tools.ietf.org/html/rfc7231#section-6.6.2)]
+    NOT_IMPLEMENTED = 48;
+    // 502 Bad Gateway
+    // [[RFC7231, Section 6.6.3](https://tools.ietf.org/html/rfc7231#section-6.6.3)]
+    BAD_GATEWAY = 49;
+    // 503 Service Unavailable
+    // [[RFC7231, Section 6.6.4](https://tools.ietf.org/html/rfc7231#section-6.6.4)]
+    SERVICE_UNAVAILABLE = 50;
+    // 504 Gateway Timeout
+    // [[RFC7231, Section 6.6.5](https://tools.ietf.org/html/rfc7231#section-6.6.5)]
+    GATEWAY_TIMEOUT = 51;
+    // 505 HTTP Version Not Supported
+    // [[RFC7231, Section 6.6.6](https://tools.ietf.org/html/rfc7231#section-6.6.6)]
+    HTTP_VERSION_NOT_SUPPORTED = 52;
+    // 506 Variant Also Negotiates
+    // [[RFC2295](https://tools.ietf.org/html/rfc2295)]
+    VARIANT_ALSO_NEGOTIATES = 53;
+    // 507 Insufficient Storage
+    // [[RFC4918](https://tools.ietf.org/html/rfc4918)]
+    INSUFFICIENT_STORAGE = 54;
+    // 508 Loop Detected
+    // [[RFC5842](https://tools.ietf.org/html/rfc5842)]
+    LOOP_DETECTED = 55;
+    // 510 Not Extended
+    // [[RFC2774](https://tools.ietf.org/html/rfc2774)]
+    NOT_EXTENDED = 56;
+    // 511 Network Authentication Required
+    // [[RFC6585](https://tools.ietf.org/html/rfc6585)]
+    NETWORK_AUTHENTICATION_REQUIRED = 57;
+}
+
+message Request {
+    message Parts {
+        Method method = 1;
+        string uri = 2;
+        Version version = 3;
+        map<string, string> headers = 4;
+        map<string, bytes> extensions = 5;
+    }
+    Parts head = 1;
+    bytes body = 2;
+}
+
+message Response {
+    message Parts {
+        StatusCode status = 1;
+        string uri = 2;
+        Version version = 3;
+        map<string, string> headers = 4;
+        map<string, bytes> extensions = 5;
+    }
+    Parts head = 1;
+    bytes body = 2;
+}

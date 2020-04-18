@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package olha.v1;
+
+import "v1/http.proto";
+import "v1/http/service.proto";
+import "v1/http/client.proto";

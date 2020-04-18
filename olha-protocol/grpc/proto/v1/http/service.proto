@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package olha.v1.http.service;
+
+import "v1/http.proto";
+import "google/protobuf/empty.proto";
+
+service Routing {
+    rpc Register(RouteCollection) returns (google.protobuf.Empty);
+    rpc Handler(Request) returns (stream Response);
+}
+
+message RouteCollection {
+    repeated Route routes = 1;
+}
+
+message Route {
+    string name = 1;
+    string path = 2;
+    repeated olha.v1.http.Method methods = 3;
+    string controller = 4;
+}
+
+message Request {
+    string controller = 1;
+    map<string, string> paths = 2;
+    olha.v1.http.Request request = 3;
+}
+
+message Response {
+    olha.v1.http.Response response = 1;
+}
