@@ -1,0 +1,3 @@
+[submodule "olha-protocol/grpc/proto"]
+	path = olha-protocol/grpc/proto
+	url = https://github.com/olha-framework/grpc-proto.git

@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "olha",
+    "olha-common",
+    "olha-protocol/grpc",
+]
